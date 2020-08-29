@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Messenger</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Chat">Чат</string>
+    <string name="Settings">Настройки</string>
 </resources>

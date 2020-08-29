@@ -2,9 +2,10 @@ package com.exemple.messenger
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.exemple.messenger.ui.ChatFragment
+import com.exemple.messenger.ui.SettingsFragment
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initFunc() {
         setSupportActionBar(mToolbar)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.dataContainer, ChatFragment()).commit()
         createHeader()
         createDrawer()
     }
@@ -97,7 +100,12 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     drawerItem: IDrawerItem<*>
                 ): Boolean {
-                    Toast.makeText(applicationContext, position.toString(),Toast.LENGTH_SHORT).show()
+                    when (position) {
+                        7 -> supportFragmentManager.beginTransaction()
+                            .replace(R.id.dataContainer, SettingsFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    }
                     return false
                 }
             }).build()

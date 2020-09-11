@@ -6,8 +6,10 @@ import androidx.appcompat.widget.Toolbar
 import com.exemple.messenger.activities.RegisterActivity
 import com.exemple.messenger.ui.fragments.ChatFragment
 import com.exemple.messenger.ui.objects.AppDrawer
+import com.exemple.messenger.utilits.AUTH
 import com.exemple.messenger.utilits.replaceActivity
 import com.exemple.messenger.utilits.replaceFragment
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,10 +28,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
-        if (false) {
+        if (AUTH.currentUser != null) {
             setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            replaceFragment(ChatFragment())
+            replaceFragment(ChatFragment(),false)
         } else {
             replaceActivity(RegisterActivity())
         }
@@ -39,5 +41,6 @@ class MainActivity : AppCompatActivity() {
     private fun initFields() {
         mToolbar = findViewById(R.id.mainToolbar)
         mAppDrawer = AppDrawer(this, mToolbar)
+        AUTH = FirebaseAuth.getInstance()
     }
 }

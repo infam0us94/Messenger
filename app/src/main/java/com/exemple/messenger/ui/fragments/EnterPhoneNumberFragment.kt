@@ -10,7 +10,6 @@ import com.exemple.messenger.utilits.replaceActivity
 import com.exemple.messenger.utilits.replaceFragment
 import com.exemple.messenger.utilits.showToast
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
@@ -23,7 +22,6 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
 
     override fun onStart() {
         super.onStart()
-        AUTH = FirebaseAuth.getInstance()
         mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
                 AUTH.signInWithCredential(p0).addOnCompleteListener { task ->

@@ -3,17 +3,23 @@ package com.exemple.messenger.ui.fragments
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import com.exemple.messenger.MainActivity
 import com.exemple.messenger.R
 import com.exemple.messenger.utilits.*
 import kotlinx.android.synthetic.main.fragment_change_name.*
 
-class ChangeNameFragment : Fragment(R.layout.fragment_change_name) {
+class ChangeNameFragment : BaseFragment(R.layout.fragment_change_name) {
 
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
+        val fullnameList = USER.fullname.split(" ")
+        if (fullnameList.size > 1) {
+            settings_input_name.setText(fullnameList[0])
+            settings_input_surname.setText(fullnameList[1])
+        } else {
+            settings_input_name.setText(fullnameList[0])
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

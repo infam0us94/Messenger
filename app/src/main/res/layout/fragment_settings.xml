@@ -41,6 +41,7 @@
             app:layout_constraintTop_toTopOf="@+id/settings_user_photo" />
 
         <TextView
+            android:id="@+id/settings_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -75,7 +76,7 @@
         <TextView
             android:id="@+id/settings_phone_number"
             style="@style/normalText"
-            android:text="@string/_1188561874"
+            tools:text="@string/_1188561874"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/settings_btn_change_number_phone" />
 
@@ -103,7 +104,7 @@
         <TextView
             android:id="@+id/settings_username"
             style="@style/normalText"
-            android:text="@string/ivanpopoff"
+            tools:text="@string/ivanpopoff"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/settings_btn_change_username" />
 

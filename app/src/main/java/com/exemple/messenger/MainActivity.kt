@@ -7,6 +7,7 @@ import com.exemple.messenger.activities.RegisterActivity
 import com.exemple.messenger.ui.fragments.ChatFragment
 import com.exemple.messenger.ui.objects.AppDrawer
 import com.exemple.messenger.utilits.AUTH
+import com.exemple.messenger.utilits.initFirebase
 import com.exemple.messenger.utilits.replaceActivity
 import com.exemple.messenger.utilits.replaceFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -14,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mToolbar: Toolbar
-    private lateinit var mAppDrawer: AppDrawer
+    lateinit var mAppDrawer: AppDrawer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,5 +43,6 @@ class MainActivity : AppCompatActivity() {
         mToolbar = findViewById(R.id.mainToolbar)
         mAppDrawer = AppDrawer(this, mToolbar)
         AUTH = FirebaseAuth.getInstance()
+        initFirebase()
     }
 }

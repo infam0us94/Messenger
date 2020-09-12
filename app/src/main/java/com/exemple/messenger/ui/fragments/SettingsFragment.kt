@@ -8,6 +8,7 @@ import com.exemple.messenger.R
 import com.exemple.messenger.activities.RegisterActivity
 import com.exemple.messenger.utilits.AUTH
 import com.exemple.messenger.utilits.replaceActivity
+import com.exemple.messenger.utilits.replaceFragment
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
@@ -26,6 +27,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
                 AUTH.signOut()
                 (activity as MainActivity).replaceActivity(RegisterActivity())
             }
+            R.id.settings_menu_change_name -> replaceFragment(ChangeNameFragment())
         }
         return true
     }

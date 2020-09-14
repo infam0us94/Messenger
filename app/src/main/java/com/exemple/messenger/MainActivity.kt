@@ -1,6 +1,9 @@
 package com.exemple.messenger
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.exemple.messenger.activities.RegisterActivity
@@ -8,6 +11,7 @@ import com.exemple.messenger.models.User
 import com.exemple.messenger.ui.fragments.ChatFragment
 import com.exemple.messenger.ui.objects.AppDrawer
 import com.exemple.messenger.utilits.*
+import com.theartofdev.edmodo.cropper.CropImage
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        APP_ACTIVITY = this
         initFields()
         initFunc()
     }
@@ -44,10 +49,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUser() {
-        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
+        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
             .addListenerForSingleValueEvent(AppValueEventListener {
                 USER = it.getValue(User::class.java) ?: User()
             })
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            val uri = CropImage.getActivityResult(data).uri
+            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
+                .child(CURRENT_UID)
+            path.putFile(uri).addOnCompleteListener { task1 ->
+                if (task1.isSuccessful) {
+                    path.downloadUrl.addOnCompleteListener { task2 ->
+                        if (task2.isSuccessful) {
+                            val photoUrl = task2.result.toString()
+                            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
+                                .child(CHILD_PHOTO_URL).setValue(photoUrl)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        showToast(getString(R.string.settings_toast_data_update))
+                                        USER.photoUrl = photoUrl
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun hideKeyboard() {
+        val imm: InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
     }
 }

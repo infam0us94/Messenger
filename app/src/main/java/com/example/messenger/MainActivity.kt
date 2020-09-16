@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mToolbar: Toolbar
+    lateinit var mToolbar: Toolbar
     lateinit var mAppDrawer: AppDrawer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,16 +24,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         APP_ACTIVITY = this
         initFirebase()
-        initUser()
-        initFields()
-        initFunc()
-        CoroutineScope(Dispatchers.IO).launch {
-            initContacts()
+//        initUser()
+//        initFields()
+//        initFunc()
+        initUser(){
+            initFields()
+            initFunc()
+            CoroutineScope(Dispatchers.IO).launch {
+                initContacts()
+            }
         }
-//        initUser(){
-//            initFields()
-//            initFunc()
-//        }
     }
 
     private fun initFunc() {
@@ -46,21 +46,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun initFields() {
         mToolbar = findViewById(R.id.mainToolbar)
-        mAppDrawer = AppDrawer(this, mToolbar)
+        mAppDrawer = AppDrawer()
     }
 
-    private fun initUser() {
-        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
-            .addListenerForSingleValueEvent(AppValueEventListener {
-                USER = it.getValue(User::class.java) ?: User()
-                if (USER.username.isEmpty()) {
-                    USER.username = CURRENT_UID
-                }
-            })
-    }
+//    private fun initUser() {
+//        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
+//            .addListenerForSingleValueEvent(AppValueEventListener {
+//                USER = it.getValue(User::class.java) ?: User()
+//                if (USER.username.isEmpty()) {
+//                    USER.username = CURRENT_UID
+//                }
+//            })
+//    }
 
     override fun onStart() {
         super.onStart()

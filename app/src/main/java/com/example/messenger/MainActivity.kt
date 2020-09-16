@@ -1,0 +1,89 @@
+package com.example.messenger
+
+import android.content.pm.PackageManager
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import com.example.messenger.activities.RegisterActivity
+import com.example.messenger.models.User
+import com.example.messenger.ui.fragments.ChatFragment
+import com.example.messenger.ui.objects.AppDrawer
+import com.example.messenger.utilits.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var mToolbar: Toolbar
+    lateinit var mAppDrawer: AppDrawer
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        APP_ACTIVITY = this
+        initFirebase()
+        initUser()
+        initFields()
+        initFunc()
+        CoroutineScope(Dispatchers.IO).launch {
+            initContacts()
+        }
+//        initUser(){
+//            initFields()
+//            initFunc()
+//        }
+    }
+
+    private fun initFunc() {
+        if (AUTH.currentUser != null) {
+            setSupportActionBar(mToolbar)
+            mAppDrawer.create()
+            replaceFragment(ChatFragment(), false)
+        } else {
+            replaceActivity(RegisterActivity())
+        }
+    }
+
+
+    private fun initFields() {
+        mToolbar = findViewById(R.id.mainToolbar)
+        mAppDrawer = AppDrawer(this, mToolbar)
+    }
+
+    private fun initUser() {
+        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
+            .addListenerForSingleValueEvent(AppValueEventListener {
+                USER = it.getValue(User::class.java) ?: User()
+                if (USER.username.isEmpty()) {
+                    USER.username = CURRENT_UID
+                }
+            })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        AppStates.updateState(AppStates.ONLINE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        AppStates.updateState(AppStates.OFFLINE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (ContextCompat.checkSelfPermission(
+                APP_ACTIVITY,
+                READ_CONTACTS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            initContacts()
+        }
+    }
+}

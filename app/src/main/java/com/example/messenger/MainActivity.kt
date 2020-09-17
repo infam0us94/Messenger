@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
         initUser(){
             initFields()
             initFunc()
-            CoroutineScope(Dispatchers.IO).launch {
-                initContacts()
-            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            initContacts()
         }
     }
 

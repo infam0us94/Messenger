@@ -6,6 +6,8 @@
     <color name="colorBlack">#000000</color>
     <color name="colorAccentDark">#D1CDCD</color>
     <color name="colorGrey">#979393</color>
+    <color name="colorGreen">#7DE35B</color>
+    <color name="colorBlueWish">#12CAEA</color>
 
     <!-- Material DEFAULT colors -->
     <color name="material_drawer_primary">#2196F3</color>

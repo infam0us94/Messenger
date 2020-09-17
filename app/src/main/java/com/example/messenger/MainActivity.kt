@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.messenger.activities.RegisterActivity
-import com.example.messenger.models.User
 import com.example.messenger.ui.fragments.ChatFragment
 import com.example.messenger.ui.objects.AppDrawer
 import com.example.messenger.utilits.*
@@ -30,9 +29,9 @@ class MainActivity : AppCompatActivity() {
         initUser(){
             initFields()
             initFunc()
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            initContacts()
+            CoroutineScope(Dispatchers.IO).launch {
+                initContacts()
+            }
         }
     }
 
@@ -47,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFields() {
-        mToolbar = findViewById(R.id.mainToolbar)
+        mToolbar = findViewById(R.id.main_toolbar)
         mAppDrawer = AppDrawer()
     }
 

@@ -12,7 +12,6 @@ import com.example.messenger.models.CommonModel
 import com.example.messenger.utilits.*
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*
@@ -25,6 +24,8 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     private lateinit var mAdapter: FirebaseRecyclerAdapter<CommonModel, ContactsHolder>
     private lateinit var mRefContacts: DatabaseReference
     private lateinit var mRefUsers: DatabaseReference
+    private lateinit var mRefUsersListener: AppValueEventListener
+    private var mapListeners = hashMapOf<DatabaseReference, AppValueEventListener>()
 
     override fun onResume() {
         super.onResume()
@@ -54,12 +55,17 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                 model: CommonModel
             ) {
                 mRefUsers = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
-                mRefUsers.addValueEventListener(AppValueEventListener {
+
+                mRefUsersListener = AppValueEventListener {
                     val contact = it.getCommonModel()
                     holder.name.text = contact.fullname
                     holder.status.text = contact.state
                     holder.photo.downloadAndSetImage(contact.photoUrl)
-                })
+                    holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment(contact)) }
+                }
+
+                mRefUsers.addValueEventListener(mRefUsersListener)
+                mapListeners[mRefUsers] = mRefUsersListener
             }
         }
         mRecyclerView.adapter = mAdapter
@@ -75,6 +81,9 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     override fun onPause() {
         super.onPause()
         mAdapter.stopListening()
+        mapListeners.forEach {
+            it.key.removeEventListener(it.value)
+        }
     }
 }
 

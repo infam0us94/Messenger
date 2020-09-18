@@ -27,17 +27,18 @@
         android:textColorHint="@color/colorGrey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/chat_btn_send_message"
         />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/chat_btn_send_message"
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:padding="10dp"
         android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/chat_input_message" />
+        app:layout_constraintTop_toTopOf="@+id/chat_input_message"
+       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

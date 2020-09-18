@@ -1,9 +1,11 @@
-package com.example.messenger.ui.fragments
+package com.example.messenger.ui.fragments.single_chat
 
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.example.messenger.R
 import com.example.messenger.models.CommonModel
 import com.example.messenger.models.User
+import com.example.messenger.ui.fragments.BaseFragment
 import com.example.messenger.utilits.*
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -17,9 +19,33 @@ class SingleChatFragment(private val contact: CommonModel) :
     private lateinit var mReceivingUser: User
     private lateinit var mToolbarInfo: View
     private lateinit var mRefUser: DatabaseReference
+    private lateinit var mRefMessages: DatabaseReference
+    private lateinit var mAdapter: SingleChatAdapter
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mMessagesListener: AppValueEventListener
+    private var mListMessages = emptyList<CommonModel>()
 
     override fun onResume() {
         super.onResume()
+        initToolbar()
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        mRecyclerView = chat_recycler_view
+        mAdapter = SingleChatAdapter()
+        mRefMessages = REF_DATABASE_ROOT.child(NODE_MESSAGES)
+            .child(CURRENT_UID).child(contact.id)
+        mRecyclerView.adapter = mAdapter
+        mMessagesListener = AppValueEventListener { dataSnapshot ->
+            mListMessages = dataSnapshot.children.map { it.getCommonModel() }
+            mAdapter.setList(mListMessages)
+            mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
+        }
+        mRefMessages.addValueEventListener(mMessagesListener)
+    }
+
+    private fun initToolbar() {
         mToolbarInfo = APP_ACTIVITY.mToolbar.toolbar_info
         mToolbarInfo.visibility = View.VISIBLE
         mListenerInfoToolbar = AppValueEventListener {
@@ -32,7 +58,7 @@ class SingleChatFragment(private val contact: CommonModel) :
             val message = chat_input_message.text.toString()
             if (message.isEmpty()) {
                 showToast("Введите сообщение")
-            } else sendMessage(message, contact.id, TYPE_TEXT){
+            } else sendMessage(message, contact.id, TYPE_TEXT) {
                 chat_input_message.setText("")
             }
         }
@@ -51,5 +77,6 @@ class SingleChatFragment(private val contact: CommonModel) :
         super.onPause()
         mToolbarInfo.visibility = View.GONE
         mRefUser.removeEventListener(mListenerInfoToolbar)
+        mRefMessages.removeEventListener(mMessagesListener)
     }
 }

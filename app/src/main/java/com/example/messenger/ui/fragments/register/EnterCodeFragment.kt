@@ -1,14 +1,12 @@
-package com.example.messenger.ui.fragments
+package com.example.messenger.ui.fragments.register
 
 
 import androidx.fragment.app.Fragment
-import com.example.messenger.MainActivity
 import com.example.messenger.R
-import com.example.messenger.activities.RegisterActivity
+import com.example.messenger.database.*
 import com.example.messenger.utilits.*
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_code.*
-import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
 
 class EnterCodeFragment(val phoneNumber: String, val id: String) :
     Fragment(R.layout.fragment_enter_code) {
@@ -16,7 +14,7 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) :
 
     override fun onStart() {
         super.onStart()
-        (activity as RegisterActivity).title = phoneNumber
+        APP_ACTIVITY.title = phoneNumber
         register_input_code.addTextChangedListener(AppTextWatcher {
             val string = register_input_code.text.toString()
             if (string.length == 6) {
@@ -42,7 +40,7 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) :
                     .addOnCompleteListener { task2 ->
                         if (task2.isSuccessful) {
                             showToast("Добро пожаловать")
-                            (activity as RegisterActivity).replaceActivity(MainActivity())
+                            restartActivity()
                         } else showToast(task2.exception?.message.toString())
                     }
             } else showToast(task.exception?.message.toString())

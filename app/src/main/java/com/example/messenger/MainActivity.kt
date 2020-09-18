@@ -5,8 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.example.messenger.activities.RegisterActivity
-import com.example.messenger.ui.fragments.ChatFragment
+import com.example.messenger.database.AUTH
+import com.example.messenger.database.initFirebase
+import com.example.messenger.database.initUser
+import com.example.messenger.ui.fragments.MainFragment
+import com.example.messenger.ui.fragments.register.EnterPhoneNumberFragment
 import com.example.messenger.ui.objects.AppDrawer
 import com.example.messenger.utilits.*
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 //        initUser()
 //        initFields()
 //        initFunc()
-        initUser(){
+        initUser() {
             initFields()
             initFunc()
             CoroutineScope(Dispatchers.IO).launch {
@@ -36,12 +39,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
+        setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
-            setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            replaceFragment(ChatFragment(), false)
+            replaceFragment(MainFragment(), false)
         } else {
-            replaceActivity(RegisterActivity())
+            replaceFragment(EnterPhoneNumberFragment(), false)
         }
     }
 

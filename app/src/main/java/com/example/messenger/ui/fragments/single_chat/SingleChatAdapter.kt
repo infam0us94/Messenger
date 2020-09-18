@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.messenger.R
 import com.example.messenger.models.CommonModel
-import com.example.messenger.utilits.CURRENT_UID
+import com.example.messenger.database.CURRENT_UID
 import com.example.messenger.utilits.asTime
 import kotlinx.android.synthetic.main.message_item.view.*
 

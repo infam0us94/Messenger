@@ -3,6 +3,7 @@ package com.example.messenger.ui.fragments
 import androidx.fragment.app.Fragment
 import com.example.messenger.R
 import com.example.messenger.utilits.APP_ACTIVITY
+import com.example.messenger.utilits.hideKeyboard
 
 class MainFragment : Fragment(R.layout.fragment_chat) {
 
@@ -10,5 +11,6 @@ class MainFragment : Fragment(R.layout.fragment_chat) {
         super.onResume()
         APP_ACTIVITY.title = "Messanger"
         APP_ACTIVITY.mAppDrawer.enableDrawer()
+        hideKeyboard()
     }
 }

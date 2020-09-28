@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat
 import com.example.messenger.database.AUTH
 import com.example.messenger.database.initFirebase
 import com.example.messenger.database.initUser
-import com.example.messenger.ui.fragments.MainFragment
-import com.example.messenger.ui.fragments.register.EnterPhoneNumberFragment
+import com.example.messenger.ui.screens.MainFragment
+import com.example.messenger.ui.screens.register.EnterPhoneNumberFragment
 import com.example.messenger.ui.objects.AppDrawer
 import com.example.messenger.utilits.*
 import kotlinx.coroutines.CoroutineScope
@@ -26,9 +26,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         APP_ACTIVITY = this
         initFirebase()
-//        initUser()
-//        initFields()
-//        initFunc()
         initUser() {
             initFields()
             initFunc()
@@ -52,17 +49,6 @@ class MainActivity : AppCompatActivity() {
         mToolbar = findViewById(R.id.main_toolbar)
         mAppDrawer = AppDrawer()
     }
-
-//    private fun initUser() {
-//        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
-//            .addListenerForSingleValueEvent(AppValueEventListener {
-//                USER = it.getValue(User::class.java) ?: User()
-//                if (USER.username.isEmpty()) {
-//                    USER.username = CURRENT_UID
-//                }
-//            })
-//    }
-
     override fun onStart() {
         super.onStart()
         AppStates.updateState(AppStates.ONLINE)

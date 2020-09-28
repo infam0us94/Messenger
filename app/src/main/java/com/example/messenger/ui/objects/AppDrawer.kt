@@ -6,8 +6,8 @@ import android.view.View
 import android.widget.ImageView
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.messenger.R
-import com.example.messenger.ui.fragments.ContactsFragment
-import com.example.messenger.ui.fragments.SettingsFragment
+import com.example.messenger.ui.screens.ContactsFragment
+import com.example.messenger.ui.screens.SettingsFragment
 import com.example.messenger.utilits.APP_ACTIVITY
 import com.example.messenger.database.USER
 import com.example.messenger.utilits.downloadAndSetImage

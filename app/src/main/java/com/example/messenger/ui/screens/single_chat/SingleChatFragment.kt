@@ -1,4 +1,4 @@
-package com.example.messenger.ui.fragments.single_chat
+package com.example.messenger.ui.screens.single_chat
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -15,7 +15,8 @@ import com.example.messenger.R
 import com.example.messenger.database.*
 import com.example.messenger.models.CommonModel
 import com.example.messenger.models.User
-import com.example.messenger.ui.fragments.BaseFragment
+import com.example.messenger.ui.screens.BaseFragment
+import com.example.messenger.ui.screens.message_recycler_view.views.AppViewFactory
 import com.example.messenger.utilits.*
 import com.google.firebase.database.DatabaseReference
 import com.theartofdev.edmodo.cropper.CropImage
@@ -123,12 +124,13 @@ class SingleChatFragment(private val contact: CommonModel) :
         mRecyclerView.layoutManager = mLayoutManager
         mMessagesListener = AppChildEventListener {
             val message = it.getCommonModel()
+
             if (mSmoothScrollToPosition) {
-                mAdapter.addItemToBottom(message) {
+                mAdapter.addItemToBottom(AppViewFactory.getView(message)) {
                     mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
                 }
             } else {
-                mAdapter.addItemToTop(message) {
+                mAdapter.addItemToTop(AppViewFactory.getView(message)) {
                     mSwipeRefreshLayout.isRefreshing = false
                 }
             }
@@ -213,5 +215,6 @@ class SingleChatFragment(private val contact: CommonModel) :
     override fun onDestroyView() {
         super.onDestroyView()
         mAppVoiceRecorder.releaseRecorder()
+        mAdapter.onDestroy()
     }
 }

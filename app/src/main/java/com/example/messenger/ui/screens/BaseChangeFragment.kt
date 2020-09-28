@@ -1,4 +1,4 @@
-package com.example.messenger.ui.fragments
+package com.example.messenger.ui.screens
 
 import android.view.Menu
 import android.view.MenuInflater

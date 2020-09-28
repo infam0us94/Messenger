@@ -1,8 +1,7 @@
-package com.example.messenger.ui.fragments
+package com.example.messenger.ui.screens
 
 import com.example.messenger.R
 import com.example.messenger.database.*
-import com.example.messenger.utilits.*
 import kotlinx.android.synthetic.main.fragment_change_bio.*
 
 class ChangeBioFragment : BaseChangeFragment(R.layout.fragment_change_bio) {

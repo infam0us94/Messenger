@@ -27,7 +27,6 @@ class HolderImageMessage(view: View) : RecyclerView.ViewHolder(view), MessageHol
             chatUserImage.downloadAndSetImage(view.fileUrl)
             chatUserImageMessageTime.text =
                 view.timeStamp.asTime()
-
         } else {
             blocReceivedImageMassage.visibility = View.VISIBLE
             blocUserImageMessage.visibility = View.GONE
@@ -38,10 +37,8 @@ class HolderImageMessage(view: View) : RecyclerView.ViewHolder(view), MessageHol
     }
 
     override fun onAttach(view: MessageView) {
-
     }
 
     override fun onDetach() {
-
     }
 }

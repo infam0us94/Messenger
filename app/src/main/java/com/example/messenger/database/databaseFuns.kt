@@ -17,6 +17,7 @@ import java.io.File
 import java.util.ArrayList
 
 fun initFirebase() {
+    /* Инициализация базы данных Firebase */
     AUTH = FirebaseAuth.getInstance()
     REF_DATABASE_ROOT = FirebaseDatabase.getInstance().reference
     USER = User()
@@ -25,6 +26,7 @@ fun initFirebase() {
 }
 
 inline fun putUrlToDatabase(url: String, crossinline function: () -> Unit) {
+    /* Функция высшего порядка, отпраляет полученый URL в базу данных */
     REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
         .child(CHILD_PHOTO_URL).setValue(url)
         .addOnSuccessListener { function() }
@@ -32,18 +34,21 @@ inline fun putUrlToDatabase(url: String, crossinline function: () -> Unit) {
 }
 
 inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url: String) -> Unit) {
+    /* Функция высшего порядка, получает  URL картинки из хранилища */
     path.downloadUrl
         .addOnSuccessListener { function(it.toString()) }
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
 inline fun putFileToStorage(uri: Uri, path: StorageReference, crossinline function: () -> Unit) {
+    /* Функция высшего порядка, отправляет картинку в хранилище */
     path.putFile(uri)
         .addOnSuccessListener { function() }
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
 fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
+    // Функция добавляет номер телефона с id в базу данных.
     if (AUTH.currentUser != null) {
         REF_DATABASE_ROOT.child(NODE_PHONES).addListenerForSingleValueEvent(AppValueEventListener {
             it.children.forEach { snapshot ->
@@ -68,6 +73,7 @@ fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
 }
 
 inline fun initUser(crossinline function: () -> Unit) {
+    /* Функция высшего порядка, инициализация текущей модели USER */
     REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
         .addListenerForSingleValueEvent(AppValueEventListener {
             USER = it.getValue(User::class.java) ?: User()
@@ -78,6 +84,7 @@ inline fun initUser(crossinline function: () -> Unit) {
         })
 }
 
+// Функция преобразовывает полученые данные из Firebase в модель CommonModel
 fun DataSnapshot.getCommonModel(): CommonModel =
     this.getValue(CommonModel::class.java) ?: CommonModel()
 
@@ -105,6 +112,7 @@ fun sendMessage(message: String, receivingUserID: String, typeText: String, func
 }
 
 fun updateCurrentUsername(mNewUsername: String) {
+    /* Обновление username в базе данных у текущего пользователя */
     REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_USERNAME)
         .setValue(mNewUsername)
         .addOnCompleteListener {
@@ -118,6 +126,7 @@ fun updateCurrentUsername(mNewUsername: String) {
 }
 
 private fun deleteOldUsername(mNewUsername: String) {
+    /* Удаление старого username из базы данных  */
     REF_DATABASE_ROOT.child(NODE_USERNAMES).child(USER.username).removeValue()
         .addOnSuccessListener {
             showToast(APP_ACTIVITY.getString(R.string.settings_toast_data_update))
@@ -145,7 +154,12 @@ fun setNameToDatabase(fullname: String) {
         }.addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun sendMessageAsFile(receivingUserID: String, fileUrl: String, messageKey: String, typeMessage: String) {
+fun sendMessageAsFile(
+    receivingUserID: String,
+    fileUrl: String,
+    messageKey: String,
+    typeMessage: String
+) {
     val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserID"
     val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserID/$CURRENT_UID"
 

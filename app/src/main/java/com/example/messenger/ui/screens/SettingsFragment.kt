@@ -12,6 +12,8 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
 
+/* Фрагмент настроек */
+
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
     override fun onResume() {
@@ -39,6 +41,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     }
 
     private fun changePhotoUser() {
+        /* Изменения фото пользователя */
         CropImage.activity()
             .setAspectRatio(1, 1)
             .setRequestedSize(250, 250)
@@ -48,10 +51,12 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        /* Создания выпадающего меню*/
         activity?.menuInflater?.inflate(R.menu.settings_action_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        /* Слушатель выбора пунктов выпадающего меню */
         when (item.itemId) {
             R.id.settings_menu_exit -> {
                 AppStates.updateState((AppStates.OFFLINE))
@@ -64,6 +69,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        /* Активность которая запускается для получения картинки для фото пользователя */
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             val uri = CropImage.getActivityResult(data).uri

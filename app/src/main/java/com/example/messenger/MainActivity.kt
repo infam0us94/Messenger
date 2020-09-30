@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var mAppDrawer: AppDrawer
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        /* Функция запускается один раз, при создании активити */
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         APP_ACTIVITY = this
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
+        /* Функция инициализирует функциональность приложения */
         setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
             mAppDrawer.create()
@@ -46,9 +48,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFields() {
+        /* Функция инициализирует переменные */
         mToolbar = findViewById(R.id.main_toolbar)
         mAppDrawer = AppDrawer()
     }
+
     override fun onStart() {
         super.onStart()
         AppStates.updateState(AppStates.ONLINE)

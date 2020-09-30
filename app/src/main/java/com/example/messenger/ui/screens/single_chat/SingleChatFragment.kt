@@ -18,9 +18,11 @@ import com.example.messenger.models.User
 import com.example.messenger.ui.screens.BaseFragment
 import com.example.messenger.ui.screens.message_recycler_view.views.AppViewFactory
 import com.example.messenger.utilits.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.database.DatabaseReference
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.choice_upload.*
 import kotlinx.android.synthetic.main.fragment_single_chat.*
 import kotlinx.android.synthetic.main.toolbar_info.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +46,7 @@ class SingleChatFragment(private val contact: CommonModel) :
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mAppVoiceRecorder: AppVoiceRecorder
+    private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
 
     override fun onResume() {
         super.onResume()
@@ -54,6 +57,8 @@ class SingleChatFragment(private val contact: CommonModel) :
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet_choice)
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         mAppVoiceRecorder = AppVoiceRecorder()
         mSwipeRefreshLayout = chat_swipe_refresh
         mLayoutManager = LinearLayoutManager(this.context)
@@ -70,12 +75,13 @@ class SingleChatFragment(private val contact: CommonModel) :
             }
         })
 
-        chat_btn_attach.setOnClickListener { attachFile() }
+        chat_btn_attach.setOnClickListener { attach() }
 
         CoroutineScope(Dispatchers.IO).launch {
             chat_btn_voice.setOnTouchListener { v, event ->
                 if (checkPermission(RECORD_AUDIO)) {
                     if (event.action == MotionEvent.ACTION_DOWN) {
+                        // record
                         chat_input_message.setText("Запись")
                         chat_btn_voice.setColorFilter(
                             ContextCompat.getColor(
@@ -86,6 +92,7 @@ class SingleChatFragment(private val contact: CommonModel) :
                         val messageKey = getMessageKey(contact.id)
                         mAppVoiceRecorder.startRecord(messageKey)
                     } else if (event.action == MotionEvent.ACTION_UP) {
+                        // stop record
                         chat_input_message.setText("")
                         chat_btn_voice.colorFilter = null
                         mAppVoiceRecorder.stopRecord { file, messageKey ->
@@ -104,7 +111,19 @@ class SingleChatFragment(private val contact: CommonModel) :
         }
     }
 
+    private fun attach() {
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        btn_attach_file.setOnClickListener { attachFile() }
+        btn_attach_image.setOnClickListener { attachImage() }
+    }
+
     private fun attachFile() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*"
+        startActivityForResult(intent, PICK_FILE_REQUEST_CODE)
+    }
+
+    private fun attachImage() {
         CropImage.activity()
             .setAspectRatio(1, 1)
             .setRequestedSize(250, 250)
@@ -139,18 +158,19 @@ class SingleChatFragment(private val contact: CommonModel) :
         mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
 
         mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    mIsScrolling = true
-                }
-            }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 print(mRecyclerView.recycledViewPool.getRecycledViewCount(0))
                 if (mIsScrolling && dy < 0 && mLayoutManager.findFirstVisibleItemPosition() <= 3) {
                     updateData()
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    mIsScrolling = true
                 }
             }
         })
@@ -196,12 +216,24 @@ class SingleChatFragment(private val contact: CommonModel) :
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        /* Активность которая запускается для получения картинки для фото пользователя */
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            val uri = CropImage.getActivityResult(data).uri
-            val messageKey = getMessageKey(contact.id)
-            uploadFileToStorage(uri, messageKey, contact.id, TYPE_MESSAGE_IMAGE)
-            mSmoothScrollToPosition = true
+        if (data != null) {
+            when (requestCode) {
+                CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                    val uri = CropImage.getActivityResult(data).uri
+                    val messageKey = getMessageKey(contact.id)
+                    uploadFileToStorage(uri, messageKey, contact.id, TYPE_MESSAGE_IMAGE)
+                    mSmoothScrollToPosition = true
+                }
+
+                PICK_FILE_REQUEST_CODE -> {
+                    val uri = data?.data
+                    val messageKey = getMessageKey(contact.id)
+                    uri?.let { uploadFileToStorage(it, messageKey, contact.id, TYPE_MESSAGE_FILE) }
+                    mSmoothScrollToPosition = true
+                }
+            }
         }
     }
 

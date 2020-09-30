@@ -4,6 +4,8 @@ import com.example.messenger.R
 import com.example.messenger.database.*
 import kotlinx.android.synthetic.main.fragment_change_bio.*
 
+/* Фрагмент для изменения информации о пользователе */
+
 class ChangeBioFragment : BaseChangeFragment(R.layout.fragment_change_bio) {
 
     override fun onResume() {

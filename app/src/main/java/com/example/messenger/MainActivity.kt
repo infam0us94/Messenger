@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import com.example.messenger.database.AUTH
 import com.example.messenger.database.initFirebase
 import com.example.messenger.database.initUser
-import com.example.messenger.ui.screens.MainFragment
+import com.example.messenger.ui.screens.main_list.MainListFragment
 import com.example.messenger.ui.screens.register.EnterPhoneNumberFragment
 import com.example.messenger.ui.objects.AppDrawer
 import com.example.messenger.utilits.*
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
             mAppDrawer.create()
-            replaceFragment(MainFragment(), false)
+            replaceFragment(MainListFragment(), false)
         } else {
             replaceFragment(EnterPhoneNumberFragment(), false)
         }

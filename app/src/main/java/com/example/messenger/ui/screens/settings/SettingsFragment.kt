@@ -1,4 +1,4 @@
-package com.example.messenger.ui.screens
+package com.example.messenger.ui.screens.settings
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.example.messenger.R
 import com.example.messenger.database.*
+import com.example.messenger.ui.screens.BaseFragment
 import com.example.messenger.utilits.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView

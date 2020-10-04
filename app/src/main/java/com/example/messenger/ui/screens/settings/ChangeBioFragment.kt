@@ -1,7 +1,8 @@
-package com.example.messenger.ui.screens
+package com.example.messenger.ui.screens.settings
 
 import com.example.messenger.R
 import com.example.messenger.database.*
+import com.example.messenger.ui.screens.BaseChangeFragment
 import kotlinx.android.synthetic.main.fragment_change_bio.*
 
 /* Фрагмент для изменения информации о пользователе */

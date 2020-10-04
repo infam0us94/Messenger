@@ -1,7 +1,6 @@
 package com.example.messenger.ui.screens.single_chat
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.view.*
@@ -14,10 +13,9 @@ import com.example.messenger.R
 import com.example.messenger.database.*
 import com.example.messenger.models.CommonModel
 import com.example.messenger.models.User
-import com.example.messenger.ui.screens.BaseFragment
+import com.example.messenger.ui.screens.base.BaseFragment
 import com.example.messenger.ui.screens.main_list.MainListFragment
 import com.example.messenger.ui.screens.message_recycler_view.views.AppViewFactory
-import com.example.messenger.ui.screens.settings.ChangeNameFragment
 import com.example.messenger.utilits.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.database.DatabaseReference

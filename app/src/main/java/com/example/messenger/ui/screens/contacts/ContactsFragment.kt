@@ -1,4 +1,4 @@
-package com.example.messenger.ui.screens
+package com.example.messenger.ui.screens.contacts
 
 
 import android.view.LayoutInflater

@@ -7,7 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.example.messenger.R
 import com.example.messenger.database.*
-import com.example.messenger.ui.screens.BaseFragment
+import com.example.messenger.ui.screens.base.BaseFragment
 import com.example.messenger.utilits.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView

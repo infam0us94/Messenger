@@ -36,14 +36,13 @@ class CreateGroupFragment(private var listContacts: List<CommonModel>) :
             } else {
                 createGroupToDatabase(nameGroup, mUri, listContacts) {
                     replaceFragment(MainListFragment())
+
                 }
             }
         }
         create_group_input_name.requestFocus()
         create_group_counts.text = getPlurals(listContacts.size)
     }
-
-
 
     private fun addPhoto() {
         CropImage.activity()

@@ -5,16 +5,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.messenger.R
 import com.example.messenger.database.*
 import com.example.messenger.models.CommonModel
-import com.example.messenger.utilits.APP_ACTIVITY
-import com.example.messenger.utilits.AppValueEventListener
-import com.example.messenger.utilits.hideKeyboard
-import com.example.messenger.utilits.replaceFragment
+import com.example.messenger.ui.screens.base.BaseFragment
+import com.example.messenger.utilits.*
 import kotlinx.android.synthetic.main.add_contacts.*
 import kotlinx.android.synthetic.main.fragment_main_list.*
 
 /* Главный фрагмент, содержит все чаты, группы и каналы с которыми взаимодействует пользователь*/
 
-class AddContactsFragment : Fragment(R.layout.add_contacts) {
+class AddContactsFragment : BaseFragment(R.layout.add_contacts) {
 
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: AddContactsAdapter
@@ -24,13 +22,14 @@ class AddContactsFragment : Fragment(R.layout.add_contacts) {
     private var mListItems = listOf<CommonModel>()
 
     override fun onResume() {
+        listContacts.clear()
         super.onResume()
         APP_ACTIVITY.title = "Добавить участника"
-        APP_ACTIVITY.mAppDrawer.enableDrawer()
         hideKeyboard()
         initRecyclerView()
         add_contacts_btn_next.setOnClickListener {
-            replaceFragment(CreateGroupFragment(listContacts))
+            if (listContacts.isEmpty()) showToast("Добавьте участника")
+            else replaceFragment(CreateGroupFragment(listContacts))
         }
     }
 

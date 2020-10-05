@@ -16,6 +16,7 @@ import com.example.messenger.models.CommonModel
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.CountDownLatch
 
 /* Файл для хранения утилитарных функции, доступных во всем приложении */
 
@@ -114,3 +115,7 @@ fun getFilenameFromUri(uri: Uri): String {
         return result
     }
 }
+
+fun getPlurals(count: Int) = APP_ACTIVITY.resources.getQuantityString(
+    R.plurals.count_members, count, count
+)

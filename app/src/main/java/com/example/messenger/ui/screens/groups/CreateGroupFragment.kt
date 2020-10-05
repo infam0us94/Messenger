@@ -5,6 +5,7 @@ import com.example.messenger.R
 import com.example.messenger.models.CommonModel
 import com.example.messenger.ui.screens.base.BaseFragment
 import com.example.messenger.utilits.APP_ACTIVITY
+import com.example.messenger.utilits.getPlurals
 import com.example.messenger.utilits.hideKeyboard
 import com.example.messenger.utilits.showToast
 import kotlinx.android.synthetic.main.add_contacts.*
@@ -19,11 +20,11 @@ class CreateGroupFragment(private var listContacts: List<CommonModel>) :
     override fun onResume() {
         super.onResume()
         APP_ACTIVITY.title = "Создать группу"
-        APP_ACTIVITY.mAppDrawer.enableDrawer()
         hideKeyboard()
         initRecyclerView()
         create_group_btn_complete.setOnClickListener { showToast("Click") }
         create_group_input_name.requestFocus()
+        create_group_counts.text = getPlurals(listContacts.size)
     }
 
     private fun initRecyclerView() {
